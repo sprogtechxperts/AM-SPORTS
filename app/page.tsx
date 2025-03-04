@@ -1,10 +1,51 @@
-"use client"; // Next.js Client Component
-import React, { useState } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  subcategory: {
+    id: number;
+    name: string;
+    category: { id: number; name: string };
+  };
+}
 
 const Home = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
+  // Fetch products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/api/products");
+        const data = await res.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Open Modal
+  const handleShopNowClick = () => {
+    setIsModalOpen(true);
+  };
+
+  // Image URL Helper
+  const getImageUrl = (image: string | null) =>
+    image
+      ? `http://127.0.0.1:8000/storage/${image}`
+      : "/placeholder.jpg";
 
   return (
     <div>
@@ -15,10 +56,10 @@ const Home = () => {
         </div>
         <nav className={menuOpen ? "navMenu open" : "navMenu"}>
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Products</a></li>
-            <li><a href="#">Contact Us</a></li>
+            <li><Link href="/">Home</Link></li>
+            <li><Link href="/about">About Us</Link></li>
+            <li><Link href="/products">Products</Link></li>
+            <li><Link href="/contact">Contact Us</Link></li>
           </ul>
         </nav>
         <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
@@ -31,48 +72,70 @@ const Home = () => {
         <div className="heroContent">
           <h2>Your One-Stop Shop for Sports Equipment</h2>
           <p>From beginners to pros, we provide top-notch sports gear!</p>
-          <a href="#" className="ctaButton">Shop Now</a>
+          <button onClick={handleShopNowClick} className="ctaButton">
+            Shop Now
+          </button>
         </div>
-        <Image src="/hero-image.jpg" alt="Sports Banner" width={1400} height={600} />
-      </section>
-
-      {/* About Us Section */}
-      <section className="about">
-        <h3>About Us</h3>
-        <p>We provide top-quality sports equipment for all levels. Your success is our mission!</p>
+        <Image
+          src="/hero-image.jpg"
+          alt="Sports Banner"
+          width={1400}
+          height={600}
+        />
       </section>
 
       {/* Featured Products Section */}
       <section className="featuredProducts">
         <h3>Featured Products</h3>
         <div className="productGrid">
-          <div className="product">
-            <Image src="/product1.jpg" alt="Sports Shoes" width={200} height={200} />
-            <p>Sports Shoes</p>
-            <p>₹1999</p>
-            <a href="#">View Details</a>
-          </div>
-          <div className="product">
-            <Image src="/product2.jpg" alt="Football" width={200} height={200} />
-            <p>Football</p>
-            <p>₹899</p>
-            <a href="#">View Details</a>
-          </div>
-          <div className="product">
-            <Image src="/product3.jpg" alt="Tennis Racket" width={200} height={200} />
-            <p>Tennis Racket</p>
-            <p>₹1499</p>
-            <a href="#">View Details</a>
-          </div>
+          {products.map((product) => (
+            <div className="productCard" key={product.id}>
+              <Image
+                src={getImageUrl(product.image)}
+                alt={product.name}
+                width={300}
+                height={300}
+              />
+              <h5>{product.name}</h5>
+              <p><strong>Category:</strong> {product.subcategory.category.name}</p>
+              <p><strong>Subcategory:</strong> {product.subcategory.name}</p>
+              <p><strong>Price:</strong> ₹{product.price}</p>
+              <Link href={`/product/${product.id}`} className="viewDetails">View Details</Link>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Footer Section */}
-      <footer>
-        <div className="footerContent">
-          <p>Contact Us: 1234567890 | info@amsports.com</p>
-          <p>Follow us: <a href="#">Facebook</a> | <a href="#">Instagram</a></p>
+      {/* Modal for Register & Login */}
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modalContent">
+            <button className="closeButton" onClick={() => setIsModalOpen(false)}>✖</button>
+            <h2>{showRegister ? "Register" : "Login"}</h2>
+            {showRegister ? (
+              <form className="form">
+                <input type="text" placeholder="Name" required />
+                <input type="email" placeholder="Email" required />
+                <input type="password" placeholder="Password" required />
+                <button type="submit">Register</button>
+                <p onClick={() => setShowRegister(false)}>Already have an account? Login</p>
+              </form>
+            ) : (
+              <form className="form">
+                <input type="email" placeholder="Email" required />
+                <input type="password" placeholder="Password" required />
+                <button type="submit">Login</button>
+                <p onClick={() => setShowRegister(true)}>Don't have an account? Register</p>
+              </form>
+            )}
+          </div>
         </div>
+      )}
+
+      {/* Footer */}
+      <footer>
+        <p>Contact Us: 1234567890 | info@amsports.com</p>
+        <p>Follow us: <a href="#">Facebook</a> | <a href="#">Instagram</a></p>
       </footer>
     </div>
   );
