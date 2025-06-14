@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import ProductCard from './ProductCard'; // Make sure this path is correct
+import Link from 'next/link';
 
 const OurProducts = () => {
   return (
@@ -15,12 +16,12 @@ const OurProducts = () => {
 
         {/* View All Button */}
         <div className="mt-10">
-          <a
+          <Link
             href="/products"
             className="inline-block rounded-md bg-yellow-500 px-6 py-2 text-sm font-medium text-black hover:bg-yellow-600 transition"
           >
             View All Products
-          </a>
+          </Link>
         </div>
       </div>
     </section>

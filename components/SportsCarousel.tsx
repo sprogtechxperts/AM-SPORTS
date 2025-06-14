@@ -35,7 +35,7 @@ const SportsCarousel: React.FC = () => {
       setCurrent((prev) => (prev + 1) % total);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [total]);  // <-- Add 'total' here as dependency
 
   const prevSlide = () => {
     setCurrent((prev) => (prev - 1 + total) % total);
@@ -79,12 +79,14 @@ const SportsCarousel: React.FC = () => {
       <button
         onClick={prevSlide}
         className="absolute top-1/2 left-5 transform -translate-y-1/2 bg-white/30 text-white p-2 rounded-full hover:bg-white/50 z-20"
+        aria-label="Previous Slide"
       >
         ⬅
       </button>
       <button
         onClick={nextSlide}
         className="absolute top-1/2 right-5 transform -translate-y-1/2 bg-white/30 text-white p-2 rounded-full hover:bg-white/50 z-20"
+        aria-label="Next Slide"
       >
         ➡
       </button>
@@ -98,6 +100,14 @@ const SportsCarousel: React.FC = () => {
             className={`w-3 h-3 rounded-full cursor-pointer ${
               idx === current ? "bg-white" : "bg-white/50"
             }`}
+            aria-label={`Go to slide ${idx + 1}`}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                setCurrent(idx);
+              }
+            }}
           />
         ))}
       </div>

@@ -2,10 +2,9 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/logo';
 import { ShoppingCart, Search, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+
 import { Input } from '@/components/ui/input';
 import LoginPage from '@/components/LoginPage';
 import { allProducts } from '@/lib/allProducts';
@@ -13,7 +12,7 @@ import { Product } from '@/lib/type';
 import Image from 'next/image';
 
 export default function Header() {
-  const router = useRouter();
+  
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Product[]>([]);
@@ -116,21 +115,16 @@ export default function Header() {
 
           {/* Right Side Icons */}
           <div className="flex items-center md:gap-8 gap-4 shrink-0">
-            <Link href="/cart" aria-label="Cart">
-              <span
-                variant="ghost"
-                className="text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800"
-              >
-                <ShoppingCart className="md:size-8 size-6"  />
-              </span>
+            <Link href="/cart" aria-label="Cart" className="text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800 rounded p-1">
+              <ShoppingCart className="md:size-8 size-6" />
             </Link>
 
-            <span
+            <button
               onClick={() => setShowLoginPopup(true)}
-              className="text-black rounded md:px-2 px-1 md:py-1  dark:text-white border border-black dark:border-white hover:bg-gray-200 dark:hover:bg-gray-800"
+              className="text-black rounded md:px-2 px-1 md:py-1 dark:text-white border border-black dark:border-white hover:bg-gray-200 dark:hover:bg-gray-800"
             >
               Login
-            </span>
+            </button>
           </div>
         </div>
       </header>
@@ -145,6 +139,7 @@ export default function Header() {
             <button
               className="absolute top-3 right-3 text-black dark:text-white hover:text-red-500"
               onClick={closeLoginPopup}
+              aria-label="Close login popup"
             >
               <X className="w-5 h-5" />
             </button>
