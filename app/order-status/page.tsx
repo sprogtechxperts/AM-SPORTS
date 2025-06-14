@@ -1,9 +1,8 @@
-// app/order-status/page.tsx
 "use client";
-import { useSearchParams } from "next/navigation";
 
 export default function OrderStatusPage() {
-  const status = useSearchParams().get("status");
+  // Just hardcode for testing or fallback
+  const status = "success"; // or "failure"
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black text-white">

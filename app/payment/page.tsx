@@ -1,13 +1,13 @@
 "use client";
 
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { allProducts } from "@/lib/allProducts";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function PaymentPage() {
+function PaymentContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const productId = searchParams.get("productId");
@@ -19,41 +19,38 @@ export default function PaymentPage() {
   useEffect(() => {
     if (!product) {
       toast.error("Invalid product");
+      setTimeout(() => router.push("/"), 2000);
     }
-  }, [product]);
+  }, [product, router]);
 
   if (!product) return null;
 
-  const price = parseInt(product.price.replace("\u20B9", ""));
+  const price = Number(product.price.replace(/[^\d.]/g, "")) || 0;
   const deliveryCharge = 40;
   const discount = 0.2 * price;
   const total = price - discount + deliveryCharge;
 
   const handlePayment = () => {
-    if (selectedMethod === "UPI" && !upiId) {
+    if (selectedMethod === "UPI" && !upiId.trim()) {
       toast.error("Please enter UPI ID");
       return;
     }
 
-    // ✅ Create new order object
     const newOrder = {
-      id: "ORD" + Math.floor(1000 + Math.random() * 9000), // Simple unique ID
+      id: "ORD" + Math.floor(1000 + Math.random() * 9000),
       productId: product.id,
       name: product.name,
       imageSrc: product.imageSrc,
       date: new Date().toISOString(),
       price: total,
       status: "Confirmed",
+      paymentMethod: selectedMethod,
     };
 
-    // ✅ Get existing orders or initialize empty array
     const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
     existingOrders.push(newOrder);
-
-    // ✅ Save updated orders to localStorage
     localStorage.setItem("orders", JSON.stringify(existingOrders));
 
-    // ✅ Toast and redirect
     toast.success(`Payment successful with ${selectedMethod}`, {
       onClose: () => {
         router.push("/order");
@@ -68,17 +65,21 @@ export default function PaymentPage() {
       <h1 className="text-2xl font-bold mb-6">Choose Payment Method</h1>
 
       <div className="w-full max-w-2xl bg-gray-900 p-6 rounded-lg space-y-4">
-        {/* Product Summary */}
         <div className="flex gap-4">
-          <Image src={product.imageSrc} alt={product.name} width={80} height={80} className="rounded" />
+          <Image
+            src={product.imageSrc}
+            alt={product.name}
+            width={80}
+            height={80}
+            className="rounded"
+          />
           <div>
             <p className="font-semibold">{product.name}</p>
-            <p>Price: ₹{price}</p>
+            <p>Price: ₹{price.toFixed(2)}</p>
             <p>Total: ₹{total.toFixed(2)}</p>
           </div>
         </div>
 
-        {/* Payment Method */}
         <div>
           <h2 className="text-lg font-semibold mb-2">Select Method</h2>
           <div className="space-y-2">
@@ -130,7 +131,6 @@ export default function PaymentPage() {
           </div>
         </div>
 
-        {/* Confirm Button */}
         <button
           onClick={handlePayment}
           className="w-full mt-4 bg-green-600 py-2 rounded hover:bg-green-700"
@@ -139,5 +139,13 @@ export default function PaymentPage() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function PaymentPage() {
+  return (
+    <Suspense fallback={<div>Loading payment info...</div>}>
+      <PaymentContent />
+    </Suspense>
   );
 }
