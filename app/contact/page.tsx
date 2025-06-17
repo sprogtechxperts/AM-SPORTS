@@ -61,11 +61,6 @@ export default function ContactPage() {
             ></iframe>
           </div>
         </div>
-
-        {/* Footer Message */}
-        <div className="text-center pt-8 border-t border-gray-700 text-gray-400 text-sm">
-          © {new Date().getFullYear()} A.M SPORTS · All rights reserved.
-        </div>
       </div>
     </div>
   );
