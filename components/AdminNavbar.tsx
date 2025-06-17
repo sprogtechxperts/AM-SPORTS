@@ -11,7 +11,18 @@ export default function AdminNavbar() {
           ? "Dashboard"
           : pathname.replace("/admin/", "").replace(/^\w/, c => c.toUpperCase())}
       </h1>
-      <div className="text-xl text-gray-300">Welcome, Admin</div>
+   <div className="flex justify-end px-4 py-2">
+  <button
+    onClick={() => {
+      localStorage.removeItem("admin-auth");
+      window.location.reload(); // Redirects to login after logout
+    }}
+    className="text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+  >
+    Logout
+  </button>
+</div>
+
     </header>
   );
 }

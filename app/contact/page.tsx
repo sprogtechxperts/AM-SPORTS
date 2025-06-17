@@ -6,10 +6,8 @@ export default function ContactPage() {
       <div className="max-w-5xl mx-auto space-y-12">
         {/* Heading Section */}
         <div className="text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact A.M SPORTS</h1>
-          <p className="text-gray-400 text-lg md:text-xl">
-            Hinjawadi Phase 1 · Badminton Gutting Service
-          </p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
+      
         </div>
 
         {/* Contact Information Section */}
@@ -19,7 +17,7 @@ export default function ContactPage() {
             <div>
               <h2 className="text-2xl font-semibold mb-2">Get In Touch</h2>
               <p className="text-gray-300">
-                We&rsquo;d love to hear from you! Whether it&rsquo;s for gutting requests, sports gear, or any general inquiries — reach out anytime.
+                We’d love to hear from you! Whether it’s for gutting requests, sports gear, or any general inquiries — reach out anytime.
               </p>
             </div>
 
@@ -37,7 +35,7 @@ export default function ContactPage() {
                 </a>
               </li>
               <li>
-                📍 Address: A.M SPORTS, Hinjawadi Phase - 1, Stadium Road, India
+                📍 Address: Hinjawadi Phase 1, Pandavnagar Vasti, Mann Road, Hinjawadi Phase 1 Rd, Maharashtra 411057, India
               </li>
               <li>
                 🌐 Map Link:{" "}
@@ -53,15 +51,13 @@ export default function ContactPage() {
             </ul>
           </div>
 
-          {/* Map or Image Placeholder */}
+          {/* Google Map Embed */}
           <div className="rounded-lg overflow-hidden shadow-lg">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.1059784043683!2d73.74151207506466!3d18.520430882577943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bbb1822e59a7%3A0xc097d35e04f7a4a4!2sA.M%20SPORTS%20-%20Hinjawadi%20Phase%20-%201%20(Badminton%20gutting%20Service)!5e0!3m2!1sen!2sin!4v1718532741492!5m2!1sen!2sin"
-              width="100%"
-              height="300"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.7674217638814!2d73.7288439737222!3d18.584521367220624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bb0cf1261b75%3A0xfa305c197f0372b3!2sA.M%20SPORTS%20-%20Hinjawadi%20Phase%20-%201%20(%20Badminton%20gutting%20Service)!5e0!3m2!1sen!2sin!4v1750150684915!5m2!1sen!2sin"
+              className="w-full h-72 rounded-md border-0"
               loading="lazy"
               allowFullScreen
-              className="w-full h-72 rounded-md border-0"
             ></iframe>
           </div>
         </div>
